@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mycellium - Campus Events</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
 <header class="navbar">
     <div class="logo">🌱 mycellium</div>
     <nav>
         <ul>
-            <li><a href="#">Events</a></li>
+            <li><a th:href="@{/}">Events</a></li>
             <li><a href="#">Clubs</a></li>
             <li><a href="#">About</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
     </nav>
     <div class="auth-buttons">
-        <button class="btn-outline">Sign In</button>
-        <button class="btn-primary">Get Started</button>
+        <a th:href="@{/auth/login}" class="btn-outline" style="text-decoration: none; display: inline-block; text-align: center;">Sign In</a>
+        <a th:href="@{/auth/signup}" class="btn-primary" style="text-decoration: none; display: inline-block; text-align: center;">Get Started</a>
     </div>
 </header>
 <section class="hero">
@@ -43,7 +43,7 @@
 </section>
 <section class="events">
     <div class="card">
-        <img src="/images/tech.jpg" alt="RoboFest">
+        <img th:src="@{/images/tech.jpg}" alt="RoboFest">
         <span class="tag">Tech</span>
         <div class="card-content">
             <h3>EWU National RoboFest 2026</h3>
@@ -54,7 +54,7 @@
     </div>
 
     <div class="card">
-        <img src="/images/arts.jpg" alt="Photography">
+        <img th:src="@{/images/arts.jpg}" alt="Photography">
         <span class="tag">Arts</span>
         <div class="card-content">
             <h3>Muhurto Photography Competition</h3>
@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="card">
-        <img src="/images/workshop.jpg" alt="ML Contest">
+        <img th:src="@{/images/workshop.jpg}" alt="ML Contest">
         <span class="tag">Tech</span>
         <div class="card-content">
             <h3>CUET ML Contest 2.0</h3>
@@ -74,7 +74,7 @@
         </div>
     </div>
     <div class="card">
-        <img src="/images/business.jpg" alt="Career Fest">
+        <img th:src="@{/images/business.jpg}" alt="Career Fest">
         <span class="tag">Career</span>
         <div class="card-content">
             <h3>CUET Career Fest 2026</h3>
@@ -84,7 +84,7 @@
         </div>
     </div>
     <div class="card">
-        <img src="/images/sports.jpg" alt="Football">
+        <img th:src="@{/images/sports.jpg}" alt="Football">
         <span class="tag">Sports</span>
         <div class="card-content">
             <h3>Collegiate Football Fest 2026</h3>
@@ -94,7 +94,7 @@
         </div>
     </div>
     <div class="card">
-        <img src="/images/seminar.jpg" alt="Study Abroad">
+        <img th:src="@{/images/seminar.jpg}" alt="Study Abroad">
         <span class="tag">Seminar</span>
         <div class="card-content">
             <h3>UK & Australia Application Day</h3>
