@@ -42,7 +42,7 @@
                     <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC] flex items-center gap-3"><i class="fa-solid fa-ticket text-[#2F5A42]"></i><span th:text="${event.fee != null && event.fee.compareTo(T(java.math.BigDecimal).ZERO) > 0 ? event.fee : 'Free'}">Free</span></div>
                     <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC] flex items-center gap-3"><i class="fa-solid fa-users text-[#2F5A42]"></i><span th:text="${event.capacity != null ? remainingSeats + ' seats left' : 'Open capacity'}">Open capacity</span></div>
                     <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC] flex items-center gap-3" th:if="${event.university != null && !#strings.isEmpty(event.university)}"><i class="fa-solid fa-building-columns text-[#2F5A42]"></i><span th:text="${event.university}">University</span></div>
-                    <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC] flex items-center gap-3"><i class="fa-solid fa-user-pen text-[#2F5A42]"></i><span class="truncate" th:text="${event.organizerEmail}">organizer@university.edu</span></div>
+                    <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC] flex items-center gap-3"><i class="fa-solid fa-user-pen text-[#2F5A42]"></i><span class="truncate" th:text="${organizerName}">Organizer name</span></div>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
         <div class="space-y-8">
             <section class="bg-white border border-[#E2E8F0] rounded-[1.5rem] p-8 shadow-sm">
                 <p class="text-xs font-black uppercase tracking-wider text-[#FF5A50] mb-2">About</p>
-                <p class="text-sm text-[#718096] leading-relaxed" th:text="${event.about != null && !#strings.isEmpty(event.about) ? event.about : event.description}">Event about details</p>
+                <p class="text-sm text-[#718096] leading-relaxed whitespace-pre-line" th:text="${event.about != null && !#strings.isEmpty(event.about) ? event.about : event.description}">Event about details</p>
             </section>
 
             <section class="bg-white border border-[#E2E8F0] rounded-[1.5rem] overflow-hidden shadow-sm">

@@ -7,6 +7,7 @@ import com.mycellium.mycellium.repository.EventCategoryRepository;
 import com.mycellium.mycellium.repository.EventRepository;
 import com.mycellium.mycellium.repository.EventTimelineRepository;
 import com.mycellium.mycellium.repository.RegistrationRepository;
+import com.mycellium.mycellium.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,9 @@ public class HomeController {
     @Autowired
     private RegistrationRepository registrationRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/")
     public String showPublicFeed(@RequestParam(value = "sort", defaultValue = "date") String sort,
                                  @RequestParam(value = "category", required = false) String category,
@@ -57,6 +61,7 @@ public class HomeController {
         model.addAttribute("sort", sort);
         model.addAttribute("category", normalizedCategory == null ? "All" : normalizedCategory);
         model.addAttribute("categories", eventCategoryRepository.findAllByOrderByNameAsc());
+        model.addAttribute("studentCount", userRepository.countByRole("STUDENT"));
 
         return "index";
     }
@@ -95,6 +100,10 @@ public class HomeController {
         model.addAttribute("eventRegistrationClosed", !"PUBLISHED".equals(event.getStatus()) || isPastDeadline(event.getRegistrationDeadline()));
         model.addAttribute("message", message);
         model.addAttribute("error", error);
+        User organizer = userRepository.findByEmail(event.getOrganizerEmail());
+        model.addAttribute("organizerName", organizer != null && organizer.getName() != null && !organizer.getName().isBlank()
+                ? organizer.getName()
+                : event.getOrganizerEmail());
         if (studentLoggedIn) {
             model.addAttribute("registeredForEvent", registrationRepository.existsActiveRegistration(event.getId(), null, loggedInUser.getEmail()));
         } else {

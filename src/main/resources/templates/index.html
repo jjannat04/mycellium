@@ -30,8 +30,8 @@
                             <p class="font-bold mt-1">events</p>
                         </div>
                         <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC]">
-                            <p class="font-black text-2xl text-[#2F5A42]">5</p>
-                            <p class="font-bold mt-1">sorts</p>
+                            <p class="font-black text-2xl text-[#2F5A42]" th:text="${studentCount}">0</p>
+                            <p class="font-bold mt-1">students</p>
                         </div>
                         <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC]">
                             <p class="font-black text-2xl text-[#2F5A42]">Live</p>
@@ -53,10 +53,7 @@
                 <input type="text" id="searchInput" onkeyup="filterEvents()" placeholder="Search visible events..." class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 pl-11 pr-4 text-sm text-[#2D3748] focus:outline-none focus:border-[#2F5A42]">
             </div>
             <form th:action="@{/}" method="GET" class="flex flex-col sm:flex-row gap-3 lg:w-auto">
-                <select name="category" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm font-semibold text-[#2D3748] focus:outline-none focus:border-[#2F5A42]">
-                    <option value="All" th:selected="${category == 'All'}">All categories</option>
-                    <option th:each="cat : ${categories}" th:value="${cat.name}" th:selected="${category == cat.name}" th:text="${cat.name}">Category</option>
-                </select>
+                <input type="hidden" name="category" th:value="${category}">
                 <select name="sort" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm font-semibold text-[#2D3748] focus:outline-none focus:border-[#2F5A42]">
                     <option value="date" th:selected="${sort == 'date'}">Date</option>
                     <option value="university" th:selected="${sort == 'university'}">University</option>
@@ -69,8 +66,8 @@
         </div>
 
         <div class="flex items-center gap-2 overflow-x-auto pb-1">
-            <button onclick="filterCategory('All', this)" class="category-pill whitespace-nowrap px-4 py-2 text-xs font-black rounded-full bg-[#EAF2ED] text-[#2F5A42] border border-[#2F5A42]">All</button>
-            <button th:each="cat : ${categories}" th:onclick="'filterCategory(''' + ${cat.name} + ''', this)'" th:text="${cat.name}" class="category-pill whitespace-nowrap px-4 py-2 text-xs font-black rounded-full bg-white text-[#718096] border border-[#E2E8F0]">Category</button>
+            <a th:href="@{/(sort=${sort})}" th:class="${'category-pill whitespace-nowrap px-4 py-2 text-xs font-black rounded-full border ' + (category == 'All' ? 'bg-[#EAF2ED] text-[#2F5A42] border-[#2F5A42]' : 'bg-white text-[#718096] border-[#E2E8F0]')}">All</a>
+            <a th:each="cat : ${categories}" th:href="@{/(category=${cat.name}, sort=${sort})}" th:text="${cat.name}" th:class="${'category-pill whitespace-nowrap px-4 py-2 text-xs font-black rounded-full border ' + (category == cat.name ? 'bg-[#EAF2ED] text-[#2F5A42] border-[#2F5A42]' : 'bg-white text-[#718096] border-[#E2E8F0]')}">Category</a>
         </div>
     </section>
 
@@ -128,28 +125,13 @@
 </footer>
 
 <script>
-    let activeCategory = 'All';
-
-    function filterCategory(category, buttonElement) {
-        document.querySelectorAll('.category-pill').forEach(pill => {
-            pill.classList.remove('bg-[#EAF2ED]', 'text-[#2F5A42]', 'border-[#2F5A42]');
-            pill.classList.add('bg-white', 'text-[#718096]', 'border-[#E2E8F0]');
-        });
-        buttonElement.classList.remove('bg-white', 'text-[#718096]', 'border-[#E2E8F0]');
-        buttonElement.classList.add('bg-[#EAF2ED]', 'text-[#2F5A42]', 'border-[#2F5A42]');
-        activeCategory = category;
-        filterEvents();
-    }
-
     function filterEvents() {
         const searchInput = document.getElementById('searchInput');
         const searchText = searchInput ? searchInput.value.toLowerCase() : '';
         document.querySelectorAll('.event-card').forEach(card => {
             const title = card.querySelector('.event-title').innerText.toLowerCase();
-            const category = card.getAttribute('data-category');
             const matchesSearch = title.includes(searchText);
-            const matchesCategory = activeCategory === 'All' || category === activeCategory;
-            card.style.display = matchesSearch && matchesCategory ? '' : 'none';
+            card.style.display = matchesSearch ? '' : 'none';
         });
     }
 </script>
