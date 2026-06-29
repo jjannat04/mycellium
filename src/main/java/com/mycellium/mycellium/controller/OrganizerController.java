@@ -399,15 +399,24 @@ public String createEvent(@ModelAttribute Event event,
     }
 
     private String resolveCategory(String selectedCategory, String newCategory) {
-        String category = isBlank(newCategory) ? selectedCategory : newCategory.trim();
-        if (isBlank(category)) {
-            return selectedCategory;
-        }
-        if (eventCategoryRepository.findByNameIgnoreCase(category) == null) {
-            eventCategoryRepository.save(new EventCategory(category));
-        }
-        return category.trim();
+
+    String category = !isBlank(newCategory)
+            ? newCategory.trim()
+            : (selectedCategory != null ? selectedCategory.trim() : null);
+
+    // ❌ HARD GUARD: never allow null category
+    if (isBlank(category)) {
+        throw new RuntimeException("Category cannot be null or empty");
     }
+
+    EventCategory existing = eventCategoryRepository.findByNameIgnoreCase(category);
+
+    if (existing == null) {
+        eventCategoryRepository.save(new EventCategory(category));
+    }
+
+    return category;
+}
 
     private void createEventNotifications(Event event) {
         if (event == null || event.getId() == null) {
