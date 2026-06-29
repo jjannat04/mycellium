@@ -112,34 +112,61 @@ public class OrganizerController {
     }
 
     @PostMapping("/events/create")
-    public String createEvent(@ModelAttribute Event event,
-                              @RequestParam("eventImage") MultipartFile file,
-                              @RequestParam(value = "newCategory", required = false) String newCategory,
-                              HttpSession session) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
+public String createEvent(@ModelAttribute Event event,
+                          @RequestParam("eventImage") MultipartFile file,
+                          @RequestParam(value = "newCategory", required = false) String newCategory,
+                          HttpSession session) {
 
-        if (loggedInUser == null) {
-            return "redirect:/auth/login";
-        }
-        if (!ORGANIZER_ROLE.equals(loggedInUser.getRole())) {
-            return "redirect:/";
-        }
+    User loggedInUser = (User) session.getAttribute("loggedInUser");
 
-        event.setOrganizerEmail(loggedInUser.getEmail());
-        event.setCategory(resolveCategory(event.getCategory(), newCategory));
+    // 🔒 Auth check
+    if (loggedInUser == null) {
+        return "redirect:/auth/login";
+    }
 
-        // Check if the user selected a file from their PC
-        if (!file.isEmpty()) {
+    if (!ORGANIZER_ROLE.equals(loggedInUser.getRole())) {
+        return "redirect:/";
+    }
+
+    // 🔒 Ensure required fields exist
+    if (event.getTitle() == null || event.getTitle().trim().isEmpty()) {
+        throw new RuntimeException("Event title is required");
+    }
+
+    // 👇 FIX: safe category handling
+    String finalCategory = resolveCategory(event.getCategory(), newCategory);
+
+    if (finalCategory == null || finalCategory.trim().isEmpty()) {
+        throw new RuntimeException("Category is required");
+    }
+
+    event.setCategory(finalCategory);
+
+    // 🔒 Set organizer
+    event.setOrganizerEmail(loggedInUser.getEmail());
+
+    // 📸 Image handling (safe)
+    try {
+        if (file != null && !file.isEmpty()) {
             event.setImageUrl(saveEventImage(file));
         } else {
-            event.setImageUrl(
-                "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800"
-            );
+            event.setImageUrl("https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800");
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+        event.setImageUrl("https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800");
+    }
 
+    // 💾 Save event safely
+    try {
         Event savedEvent = eventRepository.save(event);
         createEventNotifications(savedEvent);
-        return "redirect:/organizer/dashboard";
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException("Failed to save event: " + e.getMessage());
+    }
+
+    return "redirect:/organizer/dashboard";
     }
 
     @PostMapping("/events/{eventId}/edit")
