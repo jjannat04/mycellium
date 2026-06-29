@@ -138,13 +138,14 @@
                         <th class="px-6 py-4">Segment</th>
                         <th class="px-6 py-4">Student</th>
                         <th class="px-6 py-4">Team</th>
+                        <th class="px-6 py-4">Transaction</th>
                         <th class="px-6 py-4">Date</th>
                         <th class="px-6 py-4 text-right">Status</th>
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-[#E2E8F0] text-sm text-[#2D3748]">
                     <tr th:if="${#lists.isEmpty(registrations)}">
-                        <td colspan="6" class="px-6 py-10 text-center text-sm text-[#718096]">No registrations yet.</td>
+                        <td colspan="7" class="px-6 py-10 text-center text-sm text-[#718096]">No registrations yet.</td>
                     </tr>
                     <tr th:each="registration : ${registrations}" class="hover:bg-[#F7FAFC]">
                         <td class="px-6 py-4 font-black" th:text="${eventTitleMap[registration.eventId]}">Event title</td>
@@ -157,6 +158,7 @@
                             <span th:text="${registration.teamName != null ? registration.teamName : 'Solo'}">Solo</span>
                             <span th:if="${registration.teamSize != null}" th:text="${' / ' + registration.teamSize}"> / 1</span>
                         </td>
+                        <td class="px-6 py-4 text-xs text-[#718096]" th:text="${registration.transactionId != null && !#strings.isEmpty(registration.transactionId) ? registration.transactionId : '-'}">-</td>
                         <td class="px-6 py-4 text-xs text-[#718096]" th:text="${registration.registrationDate}">Date</td>
                         <td class="px-6 py-4 text-right">
                             <span th:if="${registration.status == 'REGISTERED'}" class="inline-flex text-xs font-black text-[#2F5A42] bg-[#EAF2ED] border border-[#D1E7DD] px-3 py-1 rounded-full">Confirmed</span>

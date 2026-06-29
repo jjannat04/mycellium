@@ -12,7 +12,7 @@
 
         <nav class="hidden md:flex items-center gap-1 text-sm font-semibold">
             <a th:href="@{/}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'events' ? 'text-[#2F5A42] bg-[#EAF2ED]' : 'text-[#718096] hover:text-[#2F5A42] hover:bg-[#F7FAFC]')}">Events</a>
-            <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'STUDENT'}" th:href="@{/student/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'student' ? 'text-[#2F5A42] bg-[#EAF2ED]' : 'text-[#718096] hover:text-[#2F5A42] hover:bg-[#F7FAFC]')}">My Passes</a>
+            <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'STUDENT'}" th:href="@{/student/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'student' ? 'text-[#2F5A42] bg-[#EAF2ED]' : 'text-[#718096] hover:text-[#2F5A42] hover:bg-[#F7FAFC]')}">My Events</a>
             <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'ORGANIZER'}" th:href="@{/organizer/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'organizer' ? 'text-[#2F5A42] bg-[#EAF2ED]' : 'text-[#718096] hover:text-[#2F5A42] hover:bg-[#F7FAFC]')}">Organizer Studio</a>
         </nav>
 

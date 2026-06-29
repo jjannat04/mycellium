@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Passes - Mycellium</title>
+    <title>My Events - Mycellium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,7 +19,7 @@
             <div class="space-y-4">
                 <span class="inline-flex text-xs font-black uppercase tracking-wider text-[#FF5A50] bg-[#FFF5F5] border border-[#FED7D7] px-3 py-1 rounded-full">Student desk</span>
                 <div>
-                    <h1 class="text-4xl font-black tracking-tight text-[#2D3748]">My Passes</h1>
+                    <h1 class="text-4xl font-black tracking-tight text-[#2D3748]">My Events</h1>
                     <p class="text-sm text-[#718096] mt-2">Welcome back, <span class="font-bold text-[#2D3748]" th:text="${student.name}">Student</span>. Track registrations and upcoming entries in one place.</p>
                 </div>
             </div>
@@ -51,7 +51,7 @@
 
         <div th:if="${#lists.isEmpty(registrations)}" class="bg-white border border-[#E2E8F0] rounded-[1.5rem] p-14 text-center shadow-sm">
             <i class="fa-solid fa-ticket text-4xl text-[#CBD5E1] mb-4"></i>
-            <h3 class="text-lg font-black text-[#2D3748]">No passes yet</h3>
+            <h3 class="text-lg font-black text-[#2D3748]">No events yet</h3>
             <p class="text-sm text-[#718096] mt-1">Explore the feed and register for your first event.</p>
         </div>
 
