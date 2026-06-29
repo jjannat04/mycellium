@@ -12,9 +12,9 @@ public class CloudinaryConfig {
     public Cloudinary cloudinary() {
         return new Cloudinary(
                 ObjectUtils.asMap(
-                        "cloud_name", System.getenv("dvv8whlgg"),
-                        "api_key", System.getenv("958271169621716"),
-                        "api_secret", System.getenv("E5u3bG_1GqCXsryUkiuMNnIeD_A")
+                        "cloud_name", System.getenv("CLOUDINARY_CLOUD_NAME"),
+                        "api_key", System.getenv("CLOUDINARY_API_KEY"),
+                        "api_secret", System.getenv("CLOUDINARY_API_SECRET")
                 )
         );
     }
