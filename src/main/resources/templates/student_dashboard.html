@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Passes - Mycellium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { font-family: 'Roboto', sans-serif; }</style>
+</head>
+<body class="min-h-screen bg-[#FAFAFA] text-[#2D3748] font-sans antialiased">
+
+<div th:replace="~{fragments :: topbar('student')}"></div>
+
+<main class="max-w-7xl mx-auto px-6 lg:px-10 py-8 space-y-8">
+    <section class="bg-white border border-[#E2E8F0] rounded-[2rem] p-8 lg:p-10 shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+            <div class="space-y-4">
+                <span class="inline-flex text-xs font-black uppercase tracking-wider text-[#FF5A50] bg-[#FFF5F5] border border-[#FED7D7] px-3 py-1 rounded-full">Student desk</span>
+                <div>
+                    <h1 class="text-4xl font-black tracking-tight text-[#2D3748]">My Passes</h1>
+                    <p class="text-sm text-[#718096] mt-2">Welcome back, <span class="font-bold text-[#2D3748]" th:text="${student.name}">Student</span>. Track registrations and upcoming entries in one place.</p>
+                </div>
+            </div>
+            <a th:href="@{/}" class="bg-[#2F5A42] hover:bg-[#234331] text-white text-sm font-black px-5 py-3 rounded-2xl shadow-sm inline-flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass text-xs"></i> Discover events
+            </a>
+        </div>
+    </section>
+
+    <div th:replace="~{fragments :: alerts}"></div>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-white border border-[#E2E8F0] rounded-[1.5rem] p-6 shadow-sm">
+            <p class="text-xs font-black uppercase tracking-wider text-[#A0AEC0]">Active passes</p>
+            <p class="text-4xl font-black text-[#2F5A42] mt-2" th:text="${rsvpCount != null ? rsvpCount : 0}">0</p>
+        </div>
+        <div class="bg-white border border-[#E2E8F0] rounded-[1.5rem] p-6 shadow-sm md:col-span-2">
+            <p class="text-xs font-black uppercase tracking-wider text-[#A0AEC0]">Account</p>
+            <p class="text-lg font-black text-[#2D3748] mt-2" th:text="${student.email}">student@university.edu</p>
+                    <p class="text-sm text-[#718096] mt-1">Only currently registered events appear here.</p>
+        </div>
+    </section>
+
+    <section class="space-y-5">
+        <div>
+            <p class="text-xs font-black uppercase tracking-wider text-[#FF5A50]">Registration log</p>
+            <h2 class="text-2xl font-black tracking-tight text-[#2D3748]">Events you joined</h2>
+        </div>
+
+        <div th:if="${#lists.isEmpty(registrations)}" class="bg-white border border-[#E2E8F0] rounded-[1.5rem] p-14 text-center shadow-sm">
+            <i class="fa-solid fa-ticket text-4xl text-[#CBD5E1] mb-4"></i>
+            <h3 class="text-lg font-black text-[#2D3748]">No passes yet</h3>
+            <p class="text-sm text-[#718096] mt-1">Explore the feed and register for your first event.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(registrations)}" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <article th:each="registration : ${registrations}" th:with="event=${eventMap[registration.id]}, segment=${segmentMap[registration.id]}" class="bg-white border border-[#E2E8F0] rounded-[1.5rem] overflow-hidden shadow-sm">
+                <div class="grid grid-cols-[120px_1fr] min-h-[150px]">
+                    <div class="bg-[#F1F5F9] overflow-hidden">
+                        <img th:if="${event != null}" th:src="${event.imageUrl}" alt="Event cover" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5 space-y-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <span class="text-[11px] font-black text-[#FF5A50] bg-[#FFF5F5] border border-[#FED7D7] px-2.5 py-1 rounded-full" th:text="${event != null ? event.category : 'N/A'}">Category</span>
+                                <h3 class="text-lg font-black text-[#2D3748] mt-3 line-clamp-2" th:text="${event != null ? event.title : 'Event unavailable'}">Event title</h3>
+                            </div>
+                            <span th:if="${registration.status == 'REGISTERED'}" class="text-[11px] font-black text-[#2F5A42] bg-[#EAF2ED] border border-[#D1E7DD] px-3 py-1 rounded-full">Confirmed</span>
+                            <span th:unless="${registration.status == 'REGISTERED'}" class="text-[11px] font-black text-[#718096] bg-[#F7FAFC] border border-[#E2E8F0] px-3 py-1 rounded-full">Cancelled</span>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2 text-xs text-[#718096]">
+                            <span><i class="fa-solid fa-layer-group w-4 text-[#2F5A42]"></i> <span th:text="${segment != null ? segment.name : 'Full event'}">Full event</span></span>
+                            <span><i class="fa-solid fa-calendar-day w-4 text-[#2F5A42]"></i> <span th:text="${event != null ? event.date : 'N/A'}">Date</span></span>
+                            <span><i class="fa-solid fa-location-dot w-4 text-[#2F5A42]"></i> <span th:text="${event != null ? event.location : 'N/A'}">Location</span></span>
+                            <span><i class="fa-solid fa-users w-4 text-[#2F5A42]"></i> <span th:text="${registration.teamName != null ? registration.teamName : 'Solo'}">Solo</span><span th:if="${registration.teamSize != null}" th:text="${' / ' + registration.teamSize}"> / 1</span></span>
+                        </div>
+                        <div class="flex items-center justify-between gap-3 pt-3 border-t border-[#F1F5F9]">
+                            <a th:if="${event != null}" th:href="@{'/events/' + ${event.id}}" class="text-xs font-black text-[#2F5A42] hover:underline">View event</a>
+                            <form th:if="${registration.status == 'REGISTERED'}" th:action="@{'/student/registrations/' + ${registration.id} + '/cancel'}" method="POST">
+                                <button type="submit" class="border border-[#FED7D7] text-[#E53E3E] hover:bg-[#FFF5F5] px-4 py-2 rounded-full text-xs font-black">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<footer class="border-t border-[#E2E8F0] bg-white py-10 text-center text-xs text-[#A0AEC0]">
+    <p>&copy; 2026 Mycellium. Campus events, connected.</p>
+</footer>
+</body>
+</html>

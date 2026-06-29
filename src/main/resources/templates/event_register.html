@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Register - ' + ${event.title}">Register - Mycellium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { font-family: 'Roboto', sans-serif; }</style>
+</head>
+<body class="min-h-screen bg-[#FAFAFA] text-[#2D3748] font-sans antialiased">
+
+<div th:replace="~{fragments :: topbar('events')}"></div>
+
+<main class="max-w-5xl mx-auto px-6 lg:px-10 py-8 space-y-8">
+    <section class="bg-white border border-[#E2E8F0] rounded-[2rem] p-8 lg:p-10 shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <div class="space-y-3">
+                <span th:if="${event.seriesName != null && !#strings.isEmpty(event.seriesName)}" class="inline-flex text-xs font-black uppercase tracking-wider text-[#FF5A50] bg-[#FFF5F5] border border-[#FED7D7] px-3 py-1 rounded-full" th:text="${event.seriesName}">Series</span>
+                <h1 class="text-4xl font-black tracking-tight text-[#2D3748]" th:text="${event.title}">Event title</h1>
+                <p class="text-sm text-[#718096]">Complete your registration details. Member fields are optional unless your organizer asks for them.</p>
+            </div>
+            <a th:href="@{'/events/' + ${event.id}}" class="text-sm font-black text-[#2F5A42] hover:underline">Back to event</a>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 items-start">
+        <form th:action="@{'/events/' + ${event.id} + '/register'}" method="POST" class="bg-white border border-[#E2E8F0] rounded-[1.5rem] p-6 lg:p-8 shadow-sm space-y-6">
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs font-black uppercase tracking-wider text-[#FF5A50]">Team</p>
+                    <h2 class="text-2xl font-black text-[#2D3748]">Registration details</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="block space-y-2">
+                        <span class="text-xs font-black text-[#4A5568] uppercase tracking-wider">Team name</span>
+                        <input type="text" name="teamName" placeholder="Optional" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+                    </label>
+                    <label class="block space-y-2">
+                        <span class="text-xs font-black text-[#4A5568] uppercase tracking-wider">Team size</span>
+                        <input id="teamSize" type="number" name="teamSize" min="1" th:min="${event.minTeamSize != null ? event.minTeamSize : 1}" th:max="${event.maxTeamSize}" th:value="${defaultTeamSize}" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+                    </label>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs font-black uppercase tracking-wider text-[#FF5A50]">Leader</p>
+                    <h2 class="text-xl font-black text-[#2D3748]">Team leader</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="block space-y-2">
+                        <span class="text-xs font-black text-[#4A5568] uppercase tracking-wider">Leader name</span>
+                        <input type="text" name="teamLeaderName" th:value="${student.name}" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+                    </label>
+                    <label class="block space-y-2">
+                        <span class="text-xs font-black text-[#4A5568] uppercase tracking-wider">Leader email</span>
+                        <input type="email" name="teamLeaderEmail" th:value="${student.email}" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+                    </label>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-wider text-[#FF5A50]">Members</p>
+                        <h2 class="text-xl font-black text-[#2D3748]">Team members</h2>
+                    </div>
+                    <button type="button" onclick="addMemberRow()" class="border border-[#E2E8F0] text-[#718096] hover:bg-[#F7FAFC] px-4 py-2 rounded-full text-xs font-black">Add row</button>
+                </div>
+                <div id="memberRows" class="space-y-3"></div>
+            </div>
+
+            <div th:if="${paidEvent}" class="space-y-2">
+                <span class="text-xs font-black text-[#4A5568] uppercase tracking-wider">Transaction ID</span>
+                <input type="text" name="transactionId" required placeholder="Required for paid events" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+            </div>
+
+            <button type="submit" class="w-full bg-[#2F5A42] hover:bg-[#234331] text-white text-sm font-black py-3 rounded-2xl shadow-sm">Confirm registration</button>
+        </form>
+
+        <aside class="bg-white border border-[#E2E8F0] rounded-[1.5rem] p-6 shadow-sm space-y-5 lg:sticky lg:top-24">
+            <div>
+                <p class="text-xs font-black uppercase tracking-wider text-[#FF5A50]">Summary</p>
+                <h2 class="text-xl font-black text-[#2D3748]">Entry rules</h2>
+            </div>
+            <div class="space-y-3 text-sm text-[#718096]">
+                <div><i class="fa-solid fa-ticket w-5 text-[#2F5A42]"></i><span th:text="${event.fee != null && event.fee.compareTo(T(java.math.BigDecimal).ZERO) > 0 ? event.fee : 'Free'}">Free</span></div>
+                <div><i class="fa-solid fa-users w-5 text-[#2F5A42]"></i><span th:text="${event.maxTeamSize != null ? ((event.minTeamSize != null ? event.minTeamSize : 1) + '-' + event.maxTeamSize + ' members') : 'Flexible team size'}">Team size</span></div>
+                <div><i class="fa-solid fa-location-dot w-5 text-[#2F5A42]"></i><span th:text="${event.location}">Location</span></div>
+                <div><i class="fa-solid fa-calendar-day w-5 text-[#2F5A42]"></i><span th:text="${event.date}">Date</span></div>
+            </div>
+        </aside>
+    </section>
+</main>
+
+<script>
+    const memberRows = document.getElementById('memberRows');
+    const teamSizeInput = document.getElementById('teamSize');
+
+    function addMemberRow(name = '', email = '') {
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3';
+        row.innerHTML = `
+            <input type="text" name="memberNames" value="${name}" placeholder="Member name" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+            <input type="email" name="memberEmails" value="${email}" placeholder="Member email" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+            <button type="button" class="border border-[#FED7D7] text-[#E53E3E] hover:bg-[#FFF5F5] px-4 py-2 rounded-full text-xs font-black">Remove</button>
+        `;
+        row.querySelector('button').addEventListener('click', () => row.remove());
+        memberRows.appendChild(row);
+    }
+
+    function syncRowsToTeamSize() {
+        const desiredRows = Math.max((parseInt(teamSizeInput.value || '1', 10) - 1), 0);
+        while (memberRows.children.length < desiredRows) {
+            addMemberRow();
+        }
+        while (memberRows.children.length > desiredRows) {
+            memberRows.removeChild(memberRows.lastElementChild);
+        }
+    }
+
+    teamSizeInput.addEventListener('change', syncRowsToTeamSize);
+    syncRowsToTeamSize();
+</script>
+</body>
+</html>
