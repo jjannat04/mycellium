@@ -1,5 +1,6 @@
 package com.mycellium.mycellium.controller;
-
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.mycellium.mycellium.model.Event;
 import com.mycellium.mycellium.model.EventCategory;
 import com.mycellium.mycellium.model.EventSegment;
@@ -22,16 +23,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
@@ -39,7 +37,8 @@ import java.util.stream.Collectors;
 public class OrganizerController {
 
     private static final String ORGANIZER_ROLE = "ORGANIZER";
-
+    @Autowired
+    private Cloudinary cloudinary;
     @Autowired
     private EventRepository eventRepository;
 
@@ -60,9 +59,6 @@ public class OrganizerController {
 
     @Autowired
     private UserRepository userRepository;
-
-    // This dynamically finds your system user home directory and targets a folder named 'mycellium-uploads'
-    private static final String UPLOAD_DIR = System.getProperty("user.home") + File.separator + "mycellium-uploads" + File.separator;
 
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session,
@@ -134,29 +130,11 @@ public class OrganizerController {
 
         // Check if the user selected a file from their PC
         if (!file.isEmpty()) {
-            try {
-                // Create the upload directory on your local machine if it doesn't exist
-                File directory = new File(UPLOAD_DIR);
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
-
-                // Create a unique filename to prevent overwriting
-                String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                Path path = Paths.get(UPLOAD_DIR + uniqueFilename);
-
-                // Physically write the bits from your PC to your storage directory
-                Files.write(path, file.getBytes());
-
-                // Save the URL route that Thymeleaf will read
-                event.setImageUrl("/uploads/" + uniqueFilename);
-            } catch (IOException e) {
-                e.printStackTrace();
-                event.setImageUrl("https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800");
-            }
+            event.setImageUrl(saveEventImage(file));
         } else {
-            // If the user didn't pick an image, use a beautiful default stock banner
-            event.setImageUrl("https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800");
+            event.setImageUrl(
+                "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800"
+            );
         }
 
         Event savedEvent = eventRepository.save(event);
@@ -371,22 +349,24 @@ public class OrganizerController {
     }
 
     private String saveEventImage(MultipartFile file) {
-        try {
-            File directory = new File(UPLOAD_DIR);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
+    try {
+        @SuppressWarnings("rawtypes")
+        Map uploadResult =
+        cloudinary.uploader().upload(
+                file.getBytes(),
+                ObjectUtils.emptyMap()
+        );
 
-            String uniqueFilename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            Path path = Paths.get(UPLOAD_DIR + uniqueFilename);
-            Files.write(path, file.getBytes());
-            return "/uploads/" + uniqueFilename;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800";
-        }
+        return uploadResult
+                .get("secure_url")
+                .toString();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+
+        return "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800";
     }
-
+    }
     private boolean isBlank(String value) {
         return value == null || value.trim().isEmpty();
     }
