@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Organizers - Mycellium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="min-h-screen bg-[#F6F8F5] text-[#1E2F27] antialiased">
+<div th:replace="~{fragments :: topbar('organizersPage')}"></div>
+
+<main class="max-w-7xl mx-auto px-6 lg:px-10 py-10 space-y-10">
+    <section class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-6 items-stretch">
+        <div class="bg-[#12372A] text-white rounded-[2.25rem] p-8 lg:p-12">
+            <p class="text-xs font-black uppercase tracking-[0.22em] text-[#FFB199]">For organizers</p>
+            <h1 class="text-4xl lg:text-6xl font-black tracking-[-0.05em] leading-tight mt-4">Launch events with a page that looks official.</h1>
+            <p class="text-lg text-white/75 leading-relaxed mt-5">Create listings, manage details, track registrations, and give students one reliable place to take action.</p>
+            <a th:href="@{/auth/register}" class="mt-8 inline-flex bg-white text-[#12372A] px-6 py-3 rounded-2xl text-sm font-black">Start organizing</a>
+        </div>
+        <div class="bg-white border border-[#DDE7E1] rounded-[2.25rem] p-8 shadow-sm">
+            <h2 class="text-2xl font-black text-[#12372A]">Platform reach</h2>
+            <div class="mt-6 grid grid-cols-2 gap-4">
+                <div class="rounded-2xl bg-[#F6F8F5] p-5"><p class="text-3xl font-black text-[#12372A]" th:text="${publishedEventCount}">0</p><p class="text-xs font-bold text-[#66756C]">events</p></div>
+                <div class="rounded-2xl bg-[#F6F8F5] p-5"><p class="text-3xl font-black text-[#12372A]" th:text="${registrationCount}">0</p><p class="text-xs font-bold text-[#66756C]">registrations</p></div>
+                <div class="rounded-2xl bg-[#F6F8F5] p-5"><p class="text-3xl font-black text-[#12372A]" th:text="${studentCount}">0</p><p class="text-xs font-bold text-[#66756C]">students</p></div>
+                <div class="rounded-2xl bg-[#F6F8F5] p-5"><p class="text-3xl font-black text-[#12372A]" th:text="${universityCount}">0</p><p class="text-xs font-bold text-[#66756C]">universities</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-white border border-[#DDE7E1] rounded-[1.75rem] p-6"><i class="fa-solid fa-pen-nib text-[#E4573D]"></i><h3 class="font-black text-[#12372A] mt-4">Publish beautifully</h3><p class="text-sm text-[#66756C] mt-2">Present dates, fees, location, timeline, and event story with clarity.</p></div>
+        <div class="bg-white border border-[#DDE7E1] rounded-[1.75rem] p-6"><i class="fa-solid fa-users-gear text-[#E4573D]"></i><h3 class="font-black text-[#12372A] mt-4">Manage signups</h3><p class="text-sm text-[#66756C] mt-2">Collect student registrations and understand event participation.</p></div>
+        <div class="bg-white border border-[#DDE7E1] rounded-[1.75rem] p-6"><i class="fa-solid fa-chart-simple text-[#E4573D]"></i><h3 class="font-black text-[#12372A] mt-4">Build credibility</h3><p class="text-sm text-[#66756C] mt-2">Give your club a consistent, professional event presence.</p></div>
+    </section>
+</main>
+
+<div th:replace="~{fragments :: footer}"></div>
+</body>
+</html>

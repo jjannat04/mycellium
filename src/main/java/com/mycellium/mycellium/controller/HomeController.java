@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class HomeController {
@@ -112,6 +114,42 @@ public class HomeController {
         return "event_details";
     }
 
+    @GetMapping("/about")
+    public String showAbout(Model model) {
+        addPlatformStats(model);
+        model.addAttribute("topUniversities", eventRepository.countPublishedEventsByUniversity());
+        model.addAttribute("topCategories", eventRepository.countPublishedEventsByCategory());
+        model.addAttribute("studentUniversities", userRepository.countStudentsByUniversity());
+        model.addAttribute("organizerUniversities", userRepository.countOrganizersByUniversity());
+        return "about";
+    }
+
+    @GetMapping("/for-organizers")
+    public String showForOrganizers(Model model) {
+        addPlatformStats(model);
+        model.addAttribute("categories", eventCategoryRepository.findAllByOrderByNameAsc());
+        return "for_organizers";
+    }
+
+    @GetMapping("/universities")
+    public String showUniversities(Model model) {
+        addPlatformStats(model);
+        model.addAttribute("universities", eventRepository.countPublishedEventsByUniversity());
+        model.addAttribute("studentUniversities", userRepository.countStudentsByUniversity());
+        model.addAttribute("organizerUniversities", userRepository.countOrganizersByUniversity());
+        return "universities";
+    }
+
+    @GetMapping("/insights")
+    public String showInsights(Model model) {
+        addPlatformStats(model);
+        model.addAttribute("topUniversities", eventRepository.countPublishedEventsByUniversity());
+        model.addAttribute("topCategories", eventRepository.countPublishedEventsByCategory());
+        model.addAttribute("studentUniversities", userRepository.countStudentsByUniversity());
+        model.addAttribute("organizerUniversities", userRepository.countOrganizersByUniversity());
+        return "insights";
+    }
+
     private Sort sortFor(String sort) {
         return switch (sort) {
             case "university" -> Sort.by(Sort.Order.asc("university"), Sort.Order.asc("title"));
@@ -124,5 +162,25 @@ public class HomeController {
 
     private boolean isPastDeadline(LocalDateTime deadline) {
         return deadline != null && LocalDateTime.now().isAfter(deadline);
+    }
+
+    private void addPlatformStats(Model model) {
+        model.addAttribute("publishedEventCount", eventRepository.countByStatus("PUBLISHED"));
+        model.addAttribute("studentCount", userRepository.countByRole("STUDENT"));
+        model.addAttribute("organizerCount", userRepository.countByRole("ORGANIZER"));
+        model.addAttribute("registrationCount", registrationRepository.countByStatus("REGISTERED"));
+        model.addAttribute("universityCount", Math.max(
+                eventRepository.countDistinctPublishedUniversities(),
+                userRepository.countDistinctUserUniversities()
+        ));
+        model.addAttribute("growthStats", growthStats());
+    }
+
+    private Map<String, String> growthStats() {
+        Map<String, String> stats = new LinkedHashMap<>();
+        stats.put("Discovery", "Students can browse events across categories and campuses.");
+        stats.put("Registration", "Organizers can collect signups directly through event pages.");
+        stats.put("Community", "Clubs get a more professional home for competitions and workshops.");
+        return stats;
     }
 }

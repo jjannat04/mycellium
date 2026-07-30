@@ -12,6 +12,10 @@
 
         <nav class="hidden md:flex items-center gap-1 text-sm font-semibold">
             <a th:href="@{/}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'events' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">Events</a>
+            <a th:href="@{/about}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'about' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">About</a>
+            <a th:href="@{/universities}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'universities' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">Universities</a>
+            <a th:href="@{/insights}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'insights' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">Insights</a>
+            <a th:href="@{/for-organizers}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'organizersPage' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">For Organizers</a>
             <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'STUDENT'}" th:href="@{/student/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'student' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">My Events</a>
             <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'ORGANIZER'}" th:href="@{/organizer/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'organizer' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">Organizer Studio</a>
         </nav>
@@ -83,13 +87,16 @@
                     <a th:href="@{/}" class="block hover:text-white">Events</a>
                     <a th:href="@{/(sort='popularity')}" class="block hover:text-white">Trending</a>
                     <a th:href="@{/(sort='date')}" class="block hover:text-white">Upcoming</a>
+                    <a th:href="@{/universities}" class="block hover:text-white">Universities</a>
                 </div>
             </div>
             <div>
                 <h3 class="text-xs font-black uppercase tracking-wider text-[#A9D8BE] mb-4">For users</h3>
                 <div class="space-y-3 text-sm text-white/65">
+                    <a th:href="@{/about}" class="block hover:text-white">About Mycellium</a>
+                    <a th:href="@{/insights}" class="block hover:text-white">Platform insights</a>
+                    <a th:href="@{/for-organizers}" class="block hover:text-white">For organizers</a>
                     <a th:href="@{/auth/register}" class="block hover:text-white">Join as student</a>
-                    <a th:href="@{/auth/register}" class="block hover:text-white">Become organizer</a>
                     <a th:href="@{/auth/login}" class="block hover:text-white">Sign in</a>
                 </div>
             </div>

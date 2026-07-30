@@ -19,6 +19,7 @@ public class User {
 
     // Added to support dynamic user categorizing ("STUDENT" or "ORGANIZER")
     private String role;
+    private String university;
 
     // Default constructor (Required by JPA)
     public User() {}
@@ -70,5 +71,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
     }
 }

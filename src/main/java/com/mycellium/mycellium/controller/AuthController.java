@@ -51,6 +51,7 @@ public class AuthController {
         String email = user.getEmail() == null ? "" : user.getEmail().trim().toLowerCase();
         String password = user.getPassword() == null ? "" : user.getPassword();
         String normalizedRole = role == null ? "" : role.trim().toUpperCase();
+        String university = user.getUniversity() == null ? "" : user.getUniversity().trim();
 
         if (user.getName() == null || user.getName().trim().isEmpty()) {
             model.addAttribute("error", "Full name is required.");
@@ -72,6 +73,10 @@ public class AuthController {
             model.addAttribute("error", "Please choose a valid account type.");
             return "register";
         }
+        if (university.isEmpty()) {
+            model.addAttribute("error", "University is required.");
+            return "register";
+        }
         if (userRepository.findByEmail(email) != null) {
             model.addAttribute("error", "An account with this email already exists.");
             return "register";
@@ -81,6 +86,7 @@ public class AuthController {
         user.setEmail(email);
         user.setPassword(PASSWORD_ENCODER.encode(password));
         user.setRole(normalizedRole);
+        user.setUniversity(university);
         userRepository.save(user);
         return "redirect:/auth/login?success=true";
     }
@@ -165,6 +171,7 @@ public class AuthController {
         sessionUser.setName(user.getName());
         sessionUser.setEmail(user.getEmail());
         sessionUser.setRole(user.getRole());
+        sessionUser.setUniversity(user.getUniversity());
         return sessionUser;
     }
 

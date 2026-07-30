@@ -16,6 +16,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Page<Event> findByCategory(String category, Pageable pageable);
     Page<Event> findByStatus(String status, Pageable pageable);
     Page<Event> findByStatusAndCategory(String status, String category, Pageable pageable);
+    long countByStatus(String status);
 
     @Query(value = """
             select e
@@ -28,4 +29,35 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             """,
             countQuery = "select count(e) from Event e where e.status = 'PUBLISHED' and (:category is null or e.category = :category)")
     Page<Event> findAllOrderByPopularity(@Param("category") String category, Pageable pageable);
+
+    @Query("""
+            select e.university, count(e)
+            from Event e
+            where e.status = 'PUBLISHED'
+              and e.university is not null
+              and e.university <> ''
+            group by e.university
+            order by count(e) desc, e.university asc
+            """)
+    List<Object[]> countPublishedEventsByUniversity();
+
+    @Query("""
+            select e.category, count(e)
+            from Event e
+            where e.status = 'PUBLISHED'
+              and e.category is not null
+              and e.category <> ''
+            group by e.category
+            order by count(e) desc, e.category asc
+            """)
+    List<Object[]> countPublishedEventsByCategory();
+
+    @Query("""
+            select count(distinct e.university)
+            from Event e
+            where e.status = 'PUBLISHED'
+              and e.university is not null
+              and e.university <> ''
+            """)
+    long countDistinctPublishedUniversities();
 }
