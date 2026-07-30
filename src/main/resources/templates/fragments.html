@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<header th:fragment="topbar(active)" class="sticky top-0 z-50 border-b border-[#E2E8F0] bg-white/95 backdrop-blur">
+<header th:fragment="topbar(active)" class="sticky top-0 z-50 border-b border-[#DDE7E1] bg-[#F6F8F5]/90 backdrop-blur-xl">
     <div class="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between gap-6">
         <a th:href="@{/}" class="flex items-center gap-3 min-w-0">
-            <span class="w-9 h-9 rounded-xl bg-[#2F5A42] text-white flex items-center justify-center shadow-sm">
+            <span class="w-10 h-10 rounded-2xl bg-[#12372A] text-white flex items-center justify-center shadow-sm shadow-[#12372A]/20">
                 <i class="fa-solid fa-network-wired text-sm"></i>
             </span>
-            <span class="text-xl font-black tracking-tight text-[#2F5A42]">mycellium</span>
+            <span class="text-xl font-black tracking-tight text-[#12372A]">mycellium</span>
         </a>
 
         <nav class="hidden md:flex items-center gap-1 text-sm font-semibold">
-            <a th:href="@{/}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'events' ? 'text-[#2F5A42] bg-[#EAF2ED]' : 'text-[#718096] hover:text-[#2F5A42] hover:bg-[#F7FAFC]')}">Events</a>
-            <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'STUDENT'}" th:href="@{/student/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'student' ? 'text-[#2F5A42] bg-[#EAF2ED]' : 'text-[#718096] hover:text-[#2F5A42] hover:bg-[#F7FAFC]')}">My Events</a>
-            <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'ORGANIZER'}" th:href="@{/organizer/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'organizer' ? 'text-[#2F5A42] bg-[#EAF2ED]' : 'text-[#718096] hover:text-[#2F5A42] hover:bg-[#F7FAFC]')}">Organizer Studio</a>
+            <a th:href="@{/}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'events' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">Events</a>
+            <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'STUDENT'}" th:href="@{/student/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'student' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">My Events</a>
+            <a th:if="${session.loggedInUser != null && session.loggedInUser.role == 'ORGANIZER'}" th:href="@{/organizer/dashboard}" th:class="${'px-4 py-2 rounded-full transition-colors ' + (active == 'organizer' ? 'text-[#12372A] bg-white shadow-sm border border-[#DDE7E1]' : 'text-[#66756C] hover:text-[#12372A] hover:bg-white/70')}">Organizer Studio</a>
         </nav>
 
         <div class="flex items-center gap-3">
             <div th:if="${session.loggedInUser == null}" class="flex items-center gap-2">
-                <a th:href="@{/auth/login}" th:class="${'text-sm font-bold px-4 py-2 rounded-full border transition-colors ' + (active == 'login' ? 'text-[#2F5A42] border-[#2F5A42] bg-[#EAF2ED]' : 'text-[#2D3748] border-[#E2E8F0] hover:border-[#2F5A42]')}">Sign in</a>
-                <a th:href="@{/auth/register}" class="hidden sm:inline-flex bg-[#2F5A42] hover:bg-[#234331] text-white text-sm font-bold px-4 py-2 rounded-full shadow-sm transition-colors">Join</a>
+                <a th:href="@{/auth/login}" th:class="${'text-sm font-bold px-4 py-2 rounded-full border transition-colors ' + (active == 'login' ? 'text-[#12372A] border-[#12372A] bg-white' : 'text-[#24362D] border-[#DDE7E1] bg-white hover:border-[#12372A]')}">Sign in</a>
+                <a th:href="@{/auth/register}" class="hidden sm:inline-flex bg-[#12372A] hover:bg-[#0B241B] text-white text-sm font-bold px-4 py-2 rounded-full shadow-sm shadow-[#12372A]/20 transition-colors">Join</a>
             </div>
 
             <details th:if="${session.loggedInUser != null && session.loggedInUser.role == 'STUDENT'}" class="relative">
@@ -64,5 +64,49 @@
         <span th:text="${error}">Something went wrong.</span>
     </div>
 </div>
+
+<footer th:fragment="footer" class="mt-16 border-t border-[#1F5B46] bg-gradient-to-br from-[#12372A] via-[#164633] to-[#0B241B] text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-8">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-white/10 border border-white/15 text-white flex items-center justify-center">
+                        <i class="fa-solid fa-network-wired text-sm"></i>
+                    </span>
+                    <span class="text-xl font-black tracking-tight text-white">mycellium</span>
+                </div>
+                <p class="text-sm text-white/70 leading-relaxed max-w-sm">A polished campus event network for discovering competitions, workshops, socials, and university moments worth attending.</p>
+            </div>
+            <div>
+                <h3 class="text-xs font-black uppercase tracking-wider text-[#A9D8BE] mb-4">Explore</h3>
+                <div class="space-y-3 text-sm text-white/65">
+                    <a th:href="@{/}" class="block hover:text-white">Events</a>
+                    <a th:href="@{/(sort='popularity')}" class="block hover:text-white">Trending</a>
+                    <a th:href="@{/(sort='date')}" class="block hover:text-white">Upcoming</a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xs font-black uppercase tracking-wider text-[#A9D8BE] mb-4">For users</h3>
+                <div class="space-y-3 text-sm text-white/65">
+                    <a th:href="@{/auth/register}" class="block hover:text-white">Join as student</a>
+                    <a th:href="@{/auth/register}" class="block hover:text-white">Become organizer</a>
+                    <a th:href="@{/auth/login}" class="block hover:text-white">Sign in</a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xs font-black uppercase tracking-wider text-[#A9D8BE] mb-4">Contact</h3>
+                <div class="flex gap-3 text-white">
+                    <span class="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center"><i class="fa-brands fa-facebook-f text-xs"></i></span>
+                    <span class="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center"><i class="fa-brands fa-instagram text-xs"></i></span>
+                    <span class="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center"><i class="fa-brands fa-linkedin-in text-xs"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-10 pt-6 border-t border-white/10 text-xs text-white/55 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+            <p>&copy; 2026 Mycellium. Campus events, connected.</p>
+            <p>Built for students, clubs, and organizers.</p>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

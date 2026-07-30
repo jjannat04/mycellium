@@ -3,134 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mycellium - Campus Event Feed</title>
+    <title>Mycellium - Campus Event Network</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>body { font-family: 'Roboto', sans-serif; }</style>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(18px); }
+    </style>
 </head>
-<body class="min-h-screen bg-[#FAFAFA] text-[#2D3748] font-sans antialiased">
+<body class="min-h-screen bg-[#F6F8F5] text-[#1E2F27] antialiased">
 
 <div th:replace="~{fragments :: topbar('events')}"></div>
 
-<main class="max-w-7xl mx-auto px-6 lg:px-10 py-8 space-y-10">
-    <section class="overflow-hidden rounded-[2rem] border border-[#E2E8F0] bg-white shadow-sm">
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_0.85fr] min-h-[320px]">
-            <div class="flex flex-col justify-center gap-6 p-7 sm:p-10 lg:p-12 bg-white">
-                    <span class="inline-flex w-fit items-center gap-2 text-xs font-black uppercase tracking-wider text-[#FF5A50] bg-[#FFF5F5] border border-[#FED7D7] px-3 py-1.5 rounded-full">
-                        <i class="fa-solid fa-star text-[11px]"></i> Campus edition
-                    </span>
-                    <div class="space-y-4 max-w-2xl">
-                        <h1 class="text-4xl lg:text-5xl font-black tracking-tight text-[#2D3748] leading-[0.98]">Find the next thing worth showing up for.</h1>
-                        <p class="text-base text-[#718096] max-w-xl leading-relaxed">Explore competitions, workshops, socials, and university events from organizers across campus.</p>
+<main class="max-w-7xl mx-auto px-6 lg:px-10 py-8 space-y-12">
+    <section class="relative overflow-hidden rounded-[2.25rem] border border-[#DDE7E1] bg-[#12372A] shadow-2xl shadow-[#12372A]/10">
+        <div class="absolute inset-0 opacity-30">
+            <div class="absolute -top-24 -right-20 w-96 h-96 rounded-full bg-[#CFE7D8] blur-3xl"></div>
+            <div class="absolute bottom-0 left-1/3 w-80 h-80 rounded-full bg-[#FFB199] blur-3xl"></div>
+        </div>
+        <div class="relative grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 p-6 sm:p-8 lg:p-10">
+            <div class="flex flex-col justify-center gap-8 py-6 lg:py-10">
+                <span class="inline-flex w-fit items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-[#DDF2E6] bg-white/10 border border-white/15 px-4 py-2 rounded-full">
+                    <i class="fa-solid fa-star text-[#FFB199]"></i> Premium campus discovery
+                </span>
+                <div class="space-y-5 max-w-3xl">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-[-0.055em] text-white leading-[0.95]">Find the rooms where campus comes alive.</h1>
+                    <p class="text-base sm:text-lg text-[#DDF2E6]/85 max-w-2xl leading-relaxed">Mycellium brings university events, competitions, workshops, and communities into one refined discovery hub.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="#eventsGrid" class="inline-flex items-center justify-center gap-2 bg-white text-[#12372A] hover:bg-[#F6F8F5] px-6 py-3 rounded-2xl text-sm font-black shadow-lg shadow-black/10">
+                        Explore events <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                    <a th:href="@{/auth/register}" class="inline-flex items-center justify-center gap-2 bg-white/10 text-white border border-white/15 hover:bg-white/15 px-6 py-3 rounded-2xl text-sm font-black">
+                        Join the network
+                    </a>
+                </div>
+                <div class="grid grid-cols-3 gap-3 max-w-2xl">
+                    <div class="glass-card rounded-3xl p-4 border border-white/20">
+                        <p class="font-black text-3xl text-[#12372A]" th:text="${eventPage != null ? eventPage.totalElements : #lists.size(publicEvents)}">0</p>
+                        <p class="text-xs font-bold text-[#66756C] mt-1">live events</p>
                     </div>
-                    <div class="grid grid-cols-3 gap-3 text-xs text-[#718096] max-w-xl">
-                        <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC]">
-                            <p class="font-black text-2xl text-[#2F5A42]" th:text="${eventPage != null ? eventPage.totalElements : #lists.size(publicEvents)}">0</p>
-                            <p class="font-bold mt-1">events</p>
-                        </div>
-                        <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC]">
-                            <p class="font-black text-2xl text-[#2F5A42]" th:text="${studentCount}">0</p>
-                            <p class="font-bold mt-1">students</p>
-                        </div>
-                        <div class="border border-[#E2E8F0] rounded-2xl p-4 bg-[#F7FAFC]">
-                            <p class="font-black text-2xl text-[#2F5A42]">Live</p>
-                            <p class="font-bold mt-1">signup</p>
-                        </div>
+                    <div class="glass-card rounded-3xl p-4 border border-white/20">
+                        <p class="font-black text-3xl text-[#12372A]" th:text="${studentCount}">0</p>
+                        <p class="text-xs font-bold text-[#66756C] mt-1">students</p>
+                    </div>
+                    <div class="glass-card rounded-3xl p-4 border border-white/20">
+                        <p class="font-black text-3xl text-[#12372A]">24/7</p>
+                        <p class="text-xs font-bold text-[#66756C] mt-1">signup</p>
                     </div>
                 </div>
-                <div class="relative min-h-[220px] lg:min-h-[320px] bg-[#F7FAFC] border-t lg:border-t-0 lg:border-l border-[#E2E8F0]">
-                    <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&auto=format&fit=crop" alt="Campus collaboration" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-[#2F5A42]/20"></div>
+            </div>
+
+            <div class="relative min-h-[440px]">
+                <div class="absolute inset-0 rounded-[2rem] overflow-hidden border border-white/15 bg-white/10">
+                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200&auto=format&fit=crop" alt="Students at a campus event" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#12372A]/70 via-transparent to-transparent"></div>
+                </div>
+                <div class="absolute left-5 right-5 bottom-5 glass-card rounded-3xl border border-white/25 p-5 shadow-xl">
+                    <p class="text-xs font-black uppercase tracking-wider text-[#E4573D]">Featured this week</p>
+                    <h2 class="text-2xl font-black tracking-tight text-[#12372A] mt-2" th:text="${!#lists.isEmpty(publicEvents) ? publicEvents[0].title : 'Annual Tech Fest 2026'}">Annual Tech Fest 2026</h2>
+                    <div class="mt-4 grid grid-cols-2 gap-3 text-xs text-[#66756C]">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-calendar-day text-[#12372A]"></i><span th:text="${!#lists.isEmpty(publicEvents) ? publicEvents[0].date : 'Coming soon'}">Coming soon</span></span>
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-[#12372A]"></i><span class="truncate" th:text="${!#lists.isEmpty(publicEvents) ? publicEvents[0].location : 'Campus auditorium'}">Campus auditorium</span></span>
+                    </div>
                 </div>
             </div>
-    </section>
-
-    <section class="bg-white border border-[#E2E8F0] rounded-[1.5rem] shadow-sm p-4 lg:p-5 space-y-4">
-        <div class="flex flex-col lg:flex-row lg:items-center gap-4">
-            <div class="relative flex-1">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-[#A0AEC0] text-sm"></i>
-                <input type="text" id="searchInput" onkeyup="filterEvents()" placeholder="Search visible events..." class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 pl-11 pr-4 text-sm text-[#2D3748] focus:outline-none focus:border-[#2F5A42]">
-            </div>
-            <form th:action="@{/}" method="GET" class="flex flex-col sm:flex-row gap-3 lg:w-auto">
-                <input type="hidden" name="category" th:value="${category}">
-                <select name="sort" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm font-semibold text-[#2D3748] focus:outline-none focus:border-[#2F5A42]">
-                    <option value="date" th:selected="${sort == 'date'}">Date</option>
-                    <option value="university" th:selected="${sort == 'university'}">University</option>
-                    <option value="name" th:selected="${sort == 'name'}">Event name</option>
-                    <option value="popularity" th:selected="${sort == 'popularity'}">Popularity</option>
-                    <option value="type" th:selected="${sort == 'type'}">Event type</option>
-                </select>
-                <button type="submit" class="bg-[#2F5A42] hover:bg-[#234331] text-white text-sm font-black px-6 py-3 rounded-2xl shadow-sm">Apply</button>
-            </form>
-        </div>
-
-        <div class="flex items-center gap-2 overflow-x-auto pb-1">
-            <a th:href="@{/(sort=${sort})}" th:class="${'category-pill whitespace-nowrap px-4 py-2 text-xs font-black rounded-full border ' + (category == 'All' ? 'bg-[#EAF2ED] text-[#2F5A42] border-[#2F5A42]' : 'bg-white text-[#718096] border-[#E2E8F0]')}">All</a>
-            <a th:each="cat : ${categories}" th:href="@{/(category=${cat.name}, sort=${sort})}" th:text="${cat.name}" th:class="${'category-pill whitespace-nowrap px-4 py-2 text-xs font-black rounded-full border ' + (category == cat.name ? 'bg-[#EAF2ED] text-[#2F5A42] border-[#2F5A42]' : 'bg-white text-[#718096] border-[#E2E8F0]')}">Category</a>
         </div>
     </section>
 
-    <section class="space-y-5">
-        <div class="flex items-end justify-between gap-4">
-            <div>
-                <p class="text-xs font-black uppercase tracking-wider text-[#FF5A50]">The feed</p>
-                <h2 class="text-2xl font-black tracking-tight text-[#2D3748]">Latest campus events</h2>
-            </div>
-        </div>
+    <section class="space-y-6">
+        <div class="space-y-6">
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white border border-[#DDE7E1] rounded-[1.5rem] p-5 shadow-sm">
+                    <i class="fa-solid fa-compass text-[#E4573D]"></i>
+                    <h3 class="font-black text-[#12372A] mt-3">Curated discovery</h3>
+                    <p class="text-sm text-[#66756C] mt-2">Browse events by category, campus, and momentum.</p>
+                </div>
+                <div class="bg-white border border-[#DDE7E1] rounded-[1.5rem] p-5 shadow-sm">
+                    <i class="fa-solid fa-ticket text-[#E4573D]"></i>
+                    <h3 class="font-black text-[#12372A] mt-3">Instant registration</h3>
+                    <p class="text-sm text-[#66756C] mt-2">Move from interest to signup without the usual chaos.</p>
+                </div>
+                <div class="bg-white border border-[#DDE7E1] rounded-[1.5rem] p-5 shadow-sm">
+                    <i class="fa-solid fa-seedling text-[#E4573D]"></i>
+                    <h3 class="font-black text-[#12372A] mt-3">Community growth</h3>
+                    <p class="text-sm text-[#66756C] mt-2">Help student clubs and organizers build real reach.</p>
+                </div>
+            </section>
 
-        <div th:if="${#lists.isEmpty(publicEvents)}" class="bg-white border border-[#E2E8F0] rounded-[1.5rem] p-14 text-center shadow-sm">
-            <i class="fa-solid fa-calendar-minus text-4xl text-[#CBD5E1] mb-4"></i>
-            <h3 class="text-lg font-black text-[#2D3748]">No events found</h3>
-            <p class="text-sm text-[#718096] mt-1">Try another category or check back later.</p>
-        </div>
-
-        <div th:unless="${#lists.isEmpty(publicEvents)}" id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            <article th:each="event : ${publicEvents}" class="event-card group bg-white border border-[#E2E8F0] rounded-[1.5rem] overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all" th:data-category="${event.category}">
-                <a th:href="@{'/events/' + ${event.id}}" class="block">
-                    <div class="h-60 bg-[#F1F5F9] overflow-hidden relative">
-                        <img th:src="${event.imageUrl}" alt="Event cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <span class="absolute top-4 left-4 text-xs font-black tracking-wide text-white bg-[#FF5A50] px-3 py-1 rounded-full shadow-sm" th:text="${event.category}">Category</span>
+            <section class="bg-white border border-[#DDE7E1] rounded-[2rem] shadow-sm p-5 lg:p-6 space-y-5">
+                <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-[#8A9A91] text-sm"></i>
+                        <input type="text" id="searchInput" onkeyup="filterEvents()" placeholder="Search visible events..." class="w-full bg-[#F6F8F5] border border-[#DDE7E1] rounded-2xl py-3 pl-11 pr-4 text-sm text-[#1E2F27] focus:outline-none focus:ring-4 focus:ring-[#DDF2E6] focus:border-[#12372A]">
                     </div>
-                    <div class="p-6 space-y-5">
-                        <div class="space-y-2">
-                            <p th:if="${event.seriesName != null && !#strings.isEmpty(event.seriesName)}" class="text-xs font-black uppercase tracking-wider text-[#FF5A50]" th:text="${event.seriesName}">Series</p>
-                            <h3 class="event-title text-xl font-black tracking-tight text-[#2D3748] group-hover:text-[#2F5A42] transition-colors line-clamp-2" th:text="${event.title}">Event Title</h3>
-                            <p class="text-sm text-[#718096] leading-relaxed line-clamp-2" th:text="${event.description}">Event description</p>
-                        </div>
-                        <div class="grid grid-cols-1 gap-2 text-xs text-[#718096] border-t border-[#F1F5F9] pt-4">
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-calendar-day w-4 text-[#2F5A42]"></i><span th:text="${event.date}">Date</span></span>
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-location-dot w-4 text-[#2F5A42]"></i><span class="line-clamp-1" th:text="${event.location}">Location</span></span>
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-building-columns w-4 text-[#2F5A42]"></i><span class="line-clamp-1" th:text="${event.university != null && !#strings.isEmpty(event.university) ? event.university : event.organizerEmail}">University</span></span>
-                            <span class="flex items-center gap-2"><i class="fa-solid fa-ticket w-4 text-[#2F5A42]"></i><span th:text="${event.fee != null && event.fee.compareTo(T(java.math.BigDecimal).ZERO) > 0 ? event.fee : 'Free'}">Free</span></span>
-                        </div>
-                        <div class="inline-flex items-center gap-2 text-xs font-black text-[#2F5A42]">
-                            View story <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
+                    <form th:action="@{/}" method="GET" class="flex flex-col sm:flex-row gap-3 lg:w-auto">
+                        <input type="hidden" name="category" th:value="${category}">
+                        <select name="sort" class="bg-[#F6F8F5] border border-[#DDE7E1] rounded-2xl py-3 px-4 text-sm font-bold text-[#1E2F27] focus:outline-none focus:ring-4 focus:ring-[#DDF2E6]">
+                            <option value="date" th:selected="${sort == 'date'}">Date</option>
+                            <option value="university" th:selected="${sort == 'university'}">University</option>
+                            <option value="name" th:selected="${sort == 'name'}">Event name</option>
+                            <option value="popularity" th:selected="${sort == 'popularity'}">Popularity</option>
+                            <option value="type" th:selected="${sort == 'type'}">Event type</option>
+                        </select>
+                        <button type="submit" class="bg-[#12372A] hover:bg-[#0B241B] text-white text-sm font-black px-6 py-3 rounded-2xl shadow-sm">Apply</button>
+                    </form>
+                </div>
 
-        <div th:if="${eventPage != null && eventPage.totalPages > 1}" class="flex items-center justify-center gap-3 pt-4">
-            <a th:if="${eventPage.hasPrevious()}" th:href="@{/(page=${eventPage.number - 1}, sort=${sort}, category=${category})}" class="border border-[#E2E8F0] text-[#718096] hover:bg-[#F7FAFC] px-4 py-2 rounded-full text-xs font-black">Previous</a>
-            <span class="text-xs font-black text-[#718096]" th:text="${(eventPage.number + 1) + ' / ' + eventPage.totalPages}">1 / 1</span>
-            <a th:if="${eventPage.hasNext()}" th:href="@{/(page=${eventPage.number + 1}, sort=${sort}, category=${category})}" class="border border-[#E2E8F0] text-[#718096] hover:bg-[#F7FAFC] px-4 py-2 rounded-full text-xs font-black">Next</a>
+                <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                    <a th:href="@{/(sort=${sort})}" th:class="${'category-pill whitespace-nowrap px-4 py-2 text-xs font-black rounded-full border transition-colors ' + (category == 'All' ? 'bg-[#12372A] text-white border-[#12372A]' : 'bg-[#F6F8F5] text-[#66756C] border-[#DDE7E1] hover:text-[#12372A]')}">All</a>
+                    <a th:each="cat : ${categories}" th:href="@{/(category=${cat.name}, sort=${sort})}" th:text="${cat.name}" th:class="${'category-pill whitespace-nowrap px-4 py-2 text-xs font-black rounded-full border transition-colors ' + (category == cat.name ? 'bg-[#12372A] text-white border-[#12372A]' : 'bg-[#F6F8F5] text-[#66756C] border-[#DDE7E1] hover:text-[#12372A]')}">Category</a>
+                </div>
+            </section>
+
+            <section class="space-y-5">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                    <div>
+                        <p class="text-xs font-black uppercase tracking-[0.2em] text-[#E4573D]">The feed</p>
+                        <h2 class="text-3xl font-black tracking-tight text-[#12372A]">Latest campus events</h2>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(publicEvents)}" class="bg-white border border-[#DDE7E1] rounded-[2rem] p-14 text-center shadow-sm">
+                    <i class="fa-solid fa-calendar-minus text-4xl text-[#B8C8BF] mb-4"></i>
+                    <h3 class="text-lg font-black text-[#12372A]">No events found</h3>
+                    <p class="text-sm text-[#66756C] mt-1">Try another category or check back later.</p>
+                </div>
+
+                <div th:unless="${#lists.isEmpty(publicEvents)}" id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <article th:each="event : ${publicEvents}" class="event-card group bg-white border border-[#DDE7E1] rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#12372A]/10 hover:-translate-y-1 transition-all duration-300" th:data-category="${event.category}">
+                        <a th:href="@{'/events/' + ${event.id}}" class="block">
+                            <div class="h-64 bg-[#EEF3EF] overflow-hidden relative">
+                                <img th:src="${event.imageUrl}" alt="Event cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#12372A]/70 via-transparent to-transparent opacity-75"></div>
+                                <span class="absolute top-4 left-4 text-xs font-black tracking-wide text-white bg-[#E4573D] px-3 py-1 rounded-full shadow-sm" th:text="${event.category}">Category</span>
+                                <span class="absolute bottom-4 left-4 right-4 text-white text-xs font-bold flex items-center gap-2"><i class="fa-solid fa-calendar-day"></i><span th:text="${event.date}">Date</span></span>
+                            </div>
+                            <div class="p-6 space-y-5">
+                                <div class="space-y-2">
+                                    <p th:if="${event.seriesName != null && !#strings.isEmpty(event.seriesName)}" class="text-xs font-black uppercase tracking-wider text-[#E4573D]" th:text="${event.seriesName}">Series</p>
+                                    <h3 class="event-title text-xl font-black tracking-tight text-[#12372A] group-hover:text-[#0B241B] transition-colors line-clamp-2" th:text="${event.title}">Event Title</h3>
+                                    <p class="event-description text-sm text-[#66756C] leading-relaxed line-clamp-2" th:text="${event.description}">Event description</p>
+                                </div>
+                                <div class="grid grid-cols-1 gap-2 text-xs text-[#66756C] border-t border-[#EEF3EF] pt-4">
+                                    <span class="flex items-center gap-2"><i class="fa-solid fa-location-dot w-4 text-[#12372A]"></i><span class="line-clamp-1" th:text="${event.location}">Location</span></span>
+                                    <span class="flex items-center gap-2"><i class="fa-solid fa-building-columns w-4 text-[#12372A]"></i><span class="line-clamp-1" th:text="${event.university != null && !#strings.isEmpty(event.university) ? event.university : event.organizerEmail}">University</span></span>
+                                    <span class="flex items-center gap-2"><i class="fa-solid fa-ticket w-4 text-[#12372A]"></i><span th:text="${event.fee != null && event.fee.compareTo(T(java.math.BigDecimal).ZERO) > 0 ? event.fee : 'Free'}">Free</span></span>
+                                </div>
+                                <div class="inline-flex items-center gap-2 text-xs font-black text-[#12372A]">
+                                    View details <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+
+                <div th:if="${eventPage != null && eventPage.totalPages > 1}" class="flex items-center justify-center gap-3 pt-4">
+                    <a th:if="${eventPage.hasPrevious()}" th:href="@{/(page=${eventPage.number - 1}, sort=${sort}, category=${category})}" class="border border-[#DDE7E1] text-[#66756C] hover:bg-white px-4 py-2 rounded-full text-xs font-black">Previous</a>
+                    <span class="text-xs font-black text-[#66756C]" th:text="${(eventPage.number + 1) + ' / ' + eventPage.totalPages}">1 / 1</span>
+                    <a th:if="${eventPage.hasNext()}" th:href="@{/(page=${eventPage.number + 1}, sort=${sort}, category=${category})}" class="border border-[#DDE7E1] text-[#66756C] hover:bg-white px-4 py-2 rounded-full text-xs font-black">Next</a>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white border border-[#DDE7E1] rounded-[2rem] p-8 shadow-sm">
+            <p class="text-xs font-black uppercase tracking-[0.2em] text-[#E4573D]">For students</p>
+            <h2 class="text-3xl font-black text-[#12372A] mt-3">Build a better campus calendar.</h2>
+            <p class="text-sm text-[#66756C] mt-3 leading-relaxed">Save time, find credible events, and discover the communities that fit your goals.</p>
+        </div>
+        <div class="bg-white border border-[#DDE7E1] rounded-[2rem] p-8 shadow-sm">
+            <p class="text-xs font-black uppercase tracking-[0.2em] text-[#E4573D]">For clubs</p>
+            <h2 class="text-3xl font-black text-[#12372A] mt-3">Give every event a stronger launch.</h2>
+            <p class="text-sm text-[#66756C] mt-3 leading-relaxed">Create professional listings and make registration easier for your audience.</p>
         </div>
     </section>
 </main>
 
-<footer class="border-t border-[#E2E8F0] bg-white py-10 text-center text-xs text-[#A0AEC0]">
-    <p>&copy; 2026 Mycellium. Campus events, connected.</p>
-</footer>
+<div th:replace="~{fragments :: footer}"></div>
 
 <script>
     function filterEvents() {
         const searchInput = document.getElementById('searchInput');
         const searchText = searchInput ? searchInput.value.toLowerCase() : '';
         document.querySelectorAll('.event-card').forEach(card => {
-            const title = card.querySelector('.event-title').innerText.toLowerCase();
-            const matchesSearch = title.includes(searchText);
+            const title = card.querySelector('.event-title')?.innerText.toLowerCase() || '';
+            const description = card.querySelector('.event-description')?.innerText.toLowerCase() || '';
+            const matchesSearch = title.includes(searchText) || description.includes(searchText);
             card.style.display = matchesSearch ? '' : 'none';
         });
     }
