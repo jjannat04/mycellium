@@ -181,7 +181,10 @@
         <form th:action="@{/organizer/events/create}" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
             <input type="text" name="title" required placeholder="Event title" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <input type="text" name="date" required placeholder="Date & time" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+                <div class="space-y-1">
+                    <label for="create-event-date" class="text-xs font-black uppercase tracking-wider text-[#718096]">Date &amp; time</label>
+                    <input id="create-event-date" type="datetime-local" name="date" required class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
+                </div>
                 <select name="category" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
                     <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}">Category</option>
                 </select>
@@ -195,7 +198,6 @@
                 <input type="number" min="1" name="maxTeamSize" placeholder="Max team" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
                 <input type="number" min="1" name="capacity" placeholder="Capacity" class="bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
             </div>
-            <input type="datetime-local" name="registrationDeadline" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]">
             <input type="file" name="eventImage" accept="image/*" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] file:bg-[#E2E8F0] file:border-none file:px-4 file:py-2 file:rounded-lg file:text-xs file:font-bold file:text-[#4A5568] file:mr-4 rounded-2xl py-2 px-4 text-xs text-[#718096]">
             <textarea name="description" rows="3" required placeholder="Description" class="w-full bg-[#F7FAFC] border border-[#E2E8F0] rounded-2xl py-3 px-4 text-sm focus:outline-none focus:border-[#2F5A42]"></textarea>
             <div class="flex justify-end gap-3">
